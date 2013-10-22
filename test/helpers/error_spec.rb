@@ -10,6 +10,17 @@ describe Jsonatra::ErrorHelpers do
       get '/he' do
         header_error :foo, :invalid, 'foo bar'
       end
+
+      get '/pec' do
+        param_error :foo, :invalid, 'foo bar' do |e|
+          e[:code] = 401
+        end
+      end
+      get '/hec' do
+        header_error :foo, :invalid, 'foo bar' do |e|
+          e[:code] = 498
+        end
+      end
     end
   end
 
@@ -31,6 +42,13 @@ describe Jsonatra::ErrorHelpers do
       end
     end
 
+    it 'can arbitrarily add to error object' do
+      gapapj '/pec' do
+        must_have_parameter_error_for :foo
+        r['error']['parameters']['foo'].first['code'].must_equal 401
+      end
+    end
+
   end
 
   describe 'header_error' do
@@ -39,6 +57,13 @@ describe Jsonatra::ErrorHelpers do
       gapapj '/he' do
         must_have_header_error_for :foo
         r['error']['headers']['foo'].first['message'].must_equal 'foo bar'
+      end
+    end
+
+    it 'can arbitrarily add to error object' do
+      gapapj '/hec' do
+        must_have_header_error_for :foo
+        r['error']['headers']['foo'].first['code'].must_equal 498
       end
     end
 
