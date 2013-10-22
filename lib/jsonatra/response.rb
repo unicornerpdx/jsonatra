@@ -44,6 +44,7 @@ module Jsonatra
 
     # new methods for adding and appending errors
     #
+    attr_writer :error
 
     def error
       @error ||= {}
@@ -52,30 +53,14 @@ module Jsonatra
 
     def error?; !error.empty?; end
 
-    def error_type= type
-      error[:type] = type
-    end
-
-    def error_message= message
-      error[:message] = message
-    end
-
-    def error_doc_url= doc_url
-      error[:doc_url] = doc_url
-    end
-
-    def error= error_hash = {}
-      self.error_type = error_hash[:type]
-      self.error_message = error_hash[:message]
-      self.error_doc_url = error_hash[:doc_url]
-    end
-
     def add_parameter_error parameter, type, message
       error[:type] ||= 'invalidInput'
       error[:message] ||= 'invalid parameter or parameter value'
       error[:parameters] ||= {}
       error[:parameters][parameter.to_sym] ||= []
-      error[:parameters][parameter.to_sym] << {type: type, message: message}
+      e = {type: type, message: message}
+      yield e if block_given?
+      error[:parameters][parameter.to_sym] << e
     end
 
     def add_header_error header, type, message
@@ -83,7 +68,9 @@ module Jsonatra
       error[:message] ||= 'invalid header or header value'
       error[:headers] ||= {}
       error[:headers][header.to_sym] ||= []
-      error[:headers][header.to_sym] << {type: type, message: message}
+      e = {type: type, message: message}
+      yield e if block_given?
+      error[:headers][header.to_sym] << e
     end
 
   end
