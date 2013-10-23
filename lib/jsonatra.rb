@@ -65,7 +65,11 @@ module Jsonatra
       # immediately return on OPTIONS
       #
       if request.request_method == 'OPTIONS'
-        halt [200, ACCESS_CONTROL_HEADERS, '']
+        if settings.respond_to? :options_handler and Proc === settings.options_handler
+          settings.options_handler.call
+        else
+          halt [200, ACCESS_CONTROL_HEADERS, '']
+        end
       end
 
       # allow origin, oauth from everywhere
