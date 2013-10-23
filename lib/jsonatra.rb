@@ -61,20 +61,24 @@ module Jsonatra
         response.jsonp_callback = params[:callback]
         content_type :js
       end
+      
+      # grok access control headers
+      #
+      achs = begin
+               self.access_control_headers
+             rescue NoMethodError
+               ACCESS_CONTROL_HEADERS
+             end
 
       # immediately return on OPTIONS
       #
       if request.request_method == 'OPTIONS'
-        if settings.respond_to? :options_handler and Proc === settings.options_handler
-          settings.options_handler.call
-        else
-          halt [200, ACCESS_CONTROL_HEADERS, '']
-        end
+        halt [200, achs, '']
       end
 
       # allow origin, oauth from everywhere
       #
-      ACCESS_CONTROL_HEADERS.each {|k,v| headers[k] = v}
+      achs.each {|k,v| headers[k] = v}
 
     end
 

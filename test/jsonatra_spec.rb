@@ -109,4 +109,25 @@ describe Jsonatra::Base do
 
   end
 
+  describe 'access_control_headers' do
+    
+    before do
+      mock_app do
+        def access_control_headers
+          { 'header_fu' => 'value_fu' }
+        end
+        get('/'){}
+      end
+    end
+
+    it 'responds with headers customized by app' do
+      [:get, :post, :options].each do |meth|
+        __send__ meth, '/'
+        last_response.headers.keys.must_include 'header_fu'
+        last_response.headers['header_fu'].must_equal 'value_fu'
+      end
+    end
+
+  end
+
 end
