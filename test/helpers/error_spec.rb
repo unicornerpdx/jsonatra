@@ -45,7 +45,7 @@ describe Jsonatra::ErrorHelpers do
     it 'can arbitrarily add to error object' do
       gapapj '/pec' do
         must_have_parameter_error_for :foo
-        r['error']['parameters']['foo'].first['code'].must_equal 401
+        r['error']['code'].must_equal 401
       end
     end
 
@@ -63,7 +63,7 @@ describe Jsonatra::ErrorHelpers do
     it 'can arbitrarily add to error object' do
       gapapj '/hec' do
         must_have_header_error_for :foo
-        r['error']['headers']['foo'].first['code'].must_equal 498
+        r['error']['code'].must_equal 498
       end
     end
 

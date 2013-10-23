@@ -58,9 +58,8 @@ module Jsonatra
       error[:message] ||= 'invalid parameter or parameter value'
       error[:parameters] ||= {}
       error[:parameters][parameter.to_sym] ||= []
-      e = {type: type, message: message}
-      yield e if block_given?
-      error[:parameters][parameter.to_sym] << e
+      yield error if block_given?
+      error[:parameters][parameter.to_sym] << {type: type, message: message}
     end
 
     def add_header_error header, type, message
@@ -68,9 +67,8 @@ module Jsonatra
       error[:message] ||= 'invalid header or header value'
       error[:headers] ||= {}
       error[:headers][header.to_sym] ||= []
-      e = {type: type, message: message}
-      yield e if block_given?
-      error[:headers][header.to_sym] << e
+      yield error if block_given?
+      error[:headers][header.to_sym] << {type: type, message: message}
     end
 
   end
