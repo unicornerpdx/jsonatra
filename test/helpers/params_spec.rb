@@ -54,19 +54,19 @@ describe Jsonatra::ParamsHelpers do
   it 'returns an informative error if it notices JSON content without correct header' do
     post '/params', {foo: 'bar', baz: 42, bat: ['a', 1, 5.75, true]}.to_json
     r['error'].wont_be_nil
-    r['error']['type'].must_equal "contentTypeMismatch"
+    r['error']['type'].must_equal "content_type_mismatch"
 
     post '/params', ['a', 1, 5.75, true].to_json
     r['error'].wont_be_nil
-    r['error']['type'].must_equal "contentTypeMismatch"
+    r['error']['type'].must_equal "content_type_mismatch"
 
     post '/params', {foo: 'bar', baz: 42, bat: ['a', 1, 5.75, true]}.to_json, {'Content-Type' => 'text/plain'}
     r['error'].wont_be_nil
-    r['error']['type'].must_equal "contentTypeMismatch"
+    r['error']['type'].must_equal "content_type_mismatch"
 
     post '/params', ['a', 1, 5.75, true].to_json, {'Content-Type' => 'text/plain'}
     r['error'].wont_be_nil
-    r['error']['type'].must_equal "contentTypeMismatch"
+    r['error']['type'].must_equal "content_type_mismatch"
   end
 
 end

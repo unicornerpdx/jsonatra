@@ -1,7 +1,6 @@
 require 'sinatra/base'
 require 'json'
 
-$:.push File.expand_path '..', __FILE__
 require 'jsonatra/response'
 require 'jsonatra/helpers/error'
 require 'jsonatra/helpers/params'
@@ -61,7 +60,7 @@ module Jsonatra
         response.jsonp_callback = params[:callback]
         content_type :js
       end
-      
+
       # grok access control headers
       #
       achs = begin
@@ -80,6 +79,12 @@ module Jsonatra
       #
       achs.each {|k,v| headers[k] = v}
 
+    end
+
+    after do
+      if settings.respond_to? :camelcase_error_types? and settings.camelcase_error_types?
+        response.camelcase_error_types if response.error?
+      end
     end
 
     error do
@@ -118,7 +123,27 @@ module Jsonatra
 
   end
 
-  class Application < Sinatra::Base
-  end
+end
 
+
+class String
+  # ripped from:
+  # https://github.com/rails/rails/blob/master/activesupport/lib/active_support/inflector/methods.rb
+  #
+  unless instance_methods.include? :camelcase
+    def camelcase
+      string = self.sub(/^(?:(?=\b|[A-Z_])|\w)/) { $&.downcase }
+      string.gsub!(/(?:_|(\/))([a-z\d]*)/i) { "#{$1}#{$2.capitalize}" }
+      string.gsub!('/', '::')
+      string
+    end
+  end
+end
+
+class Symbol
+  unless instance_methods.include? :camelcase
+    def camelcase
+      self.to_s.camelcase.to_sym
+    end
+  end
 end

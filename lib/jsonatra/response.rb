@@ -54,7 +54,7 @@ module Jsonatra
     def error?; !error.empty?; end
 
     def add_parameter_error parameter, type, message
-      error[:type] ||= 'invalidInput'
+      error[:type] ||= 'invalid_input'
       error[:message] ||= 'invalid parameter or parameter value'
       error[:parameters] ||= {}
       error[:parameters][parameter.to_sym] ||= []
@@ -63,12 +63,22 @@ module Jsonatra
     end
 
     def add_header_error header, type, message
-      error[:type] ||= 'invalidHeader'
+      error[:type] ||= 'invalid_header'
       error[:message] ||= 'invalid header or header value'
       error[:headers] ||= {}
       error[:headers][header.to_sym] ||= []
       yield error if block_given?
       error[:headers][header.to_sym] << {type: type, message: message}
+    end
+
+    def camelcase_error_types
+      error[:type] = error[:type].camelcase
+      if error[:headers]
+        error[:headers].each {|k,v| v.each {|he| he[:type] = he[:type].camelcase}}
+      end
+      if error[:parameters]
+        error[:parameters].each {|k,v| v.each {|pe| pe[:type] = pe[:type].camelcase}}
+      end
     end
 
   end

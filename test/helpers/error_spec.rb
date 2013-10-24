@@ -69,4 +69,53 @@ describe Jsonatra::ErrorHelpers do
 
   end
 
+  describe 'camelcase_error_tyeps' do
+
+    before do
+      mock_app do
+        configure do
+          enable :camelcase_error_types
+        end
+        get '/pe' do
+          param_error :foo, :snakey_snake, 'foo bar'
+        end
+        get '/he' do
+          header_error :foo, :snakey_snake, 'foo bar'
+        end
+      end
+    end
+
+    it 'camelcases parameter error types' do
+      gapapj '/pe' do
+        must_have_parameter_error_for :foo, :snakeySnake, :invalidInput
+      end
+    end
+
+    it 'camelcases header error types' do
+      gapapj '/he' do
+        must_have_header_error_for :foo, :snakeySnake, :invalidHeader
+      end
+    end
+
+    describe 'contentTypeMismatch' do
+
+      before do
+        mock_app do
+          configure do
+            enable :camelcase_error_types
+          end
+          get '/params' do
+            params
+          end
+        end
+      end
+
+      it 'returns an informative error if it notices JSON content without correct header' do
+        post '/params', {foo: 'bar', baz: 42, bat: ['a', 1, 5.75, true]}.to_json
+        r['error'].wont_be_nil
+        r['error']['type'].must_equal "contentTypeMismatch"
+      end
+
+    end
+  end
 end

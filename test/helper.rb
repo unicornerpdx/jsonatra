@@ -6,7 +6,8 @@ require 'minitest/pride'
 require 'pry'
 require 'pry-nav'
 
-require_relative '../lib/jsonatra'
+$:.push File.expand_path '../../lib', __FILE__
+require 'jsonatra'
 
 include Rack::Test::Methods
 
@@ -41,7 +42,7 @@ def get_and_post_and_post_json path, params = {}, headers = {}, &block
 end
 alias gapapj get_and_post_and_post_json
 
-def must_have_parameter_error_for parameter, type = :invalid, error_type = :invalidInput
+def must_have_parameter_error_for parameter, type = :invalid, error_type = :invalid_input
   last_response.status.must_equal 200
   r['error'].wont_be_nil
   r['error']['type'].must_equal error_type.to_s
@@ -50,7 +51,7 @@ def must_have_parameter_error_for parameter, type = :invalid, error_type = :inva
   r['error']['parameters'][parameter.to_s].first['type'].must_equal type.to_s
 end
 
-def must_have_header_error_for header, type = :invalid, error_type = :invalidHeader
+def must_have_header_error_for header, type = :invalid, error_type = :invalid_header
   last_response.status.must_equal 200
   r['error'].wont_be_nil
   r['error']['type'].must_equal error_type.to_s

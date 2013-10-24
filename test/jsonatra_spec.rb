@@ -110,7 +110,7 @@ describe Jsonatra::Base do
   end
 
   describe 'access_control_headers' do
-    
+
     before do
       mock_app do
         def access_control_headers
