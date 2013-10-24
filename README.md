@@ -1,6 +1,8 @@
 jsonatra
 ========
 
+[![Build Status](https://travis-ci.org/esripdx/jsonatra.png?branch=master)](https://travis-ci.org/esripdx/jsonatra)
+
 This is a very opinionated gem. Some of its strongly held views:
 
 * [Sinatra](http://sinatrarb.com) is the BEST.
