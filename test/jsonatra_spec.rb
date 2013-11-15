@@ -130,4 +130,24 @@ describe Jsonatra::Base do
 
   end
 
+  describe 'extensions' do
+
+    it 'camelcases strings' do # ugh
+      'foo_bar_bat_123'.camelcase.must_equal 'fooBarBat123'
+    end
+
+    it 'camelcases symbols' do # ugh
+      :foo_bar_bat_123.camelcase.must_equal :fooBarBat123
+    end
+
+    it 'blanks properly' do
+      assert ''.blank?
+      assert nil.blank?
+      refute '1'.blank?
+      refute 1.blank?
+      refute 1.1.blank?
+    end
+
+  end
+
 end

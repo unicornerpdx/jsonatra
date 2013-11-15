@@ -138,6 +138,22 @@ class String
       string
     end
   end
+
+  unless instance_methods.include? :blank?
+    alias_method :blank?, :empty?
+  end
+end
+
+class NilClass
+  unless instance_methods.include? :blank?
+    def blank?; true; end
+  end
+end
+
+class Numeric
+  unless instance_methods.include? :blank?
+    def blank?; false; end
+  end
 end
 
 class Symbol
