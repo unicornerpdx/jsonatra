@@ -4,7 +4,7 @@ require File.expand_path('../lib/jsonatra/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Kenichi Nakamura"]
   gem.email         = ["kenichi.nakamura@gmail.com"]
-  gem.description   = gem.summary = "An opinionated, non-ReST, JSON API extension for Sinatra"
+  gem.description   = gem.summary = "JSON API extension for Sinatra"
   gem.homepage      = "https://github.com/esripdx/jsonatra"
   gem.files         = `git ls-files | grep -Ev '^(myapp|examples)'`.split("\n")
   gem.test_files    = `git ls-files -- test/*`.split("\n")

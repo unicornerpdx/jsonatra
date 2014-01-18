@@ -7,14 +7,13 @@ This is a very opinionated gem. Some of its strongly held views:
 
 * [Sinatra](http://sinatrarb.com) is the BEST.
 * JSON is awesome!
-* REST is fo' suckas.
 * HTTP status codes are for **transport**!
 
 To that end, this gem subclasses `Sinatra::Base` and `Sinatra::Response` adding
 some helpful defaults to achieve the following goals:
 
 * always respond with JSON, route blocks' return hashes are automatically converted
-* all GET routes also respond to POST for large query values
+* all GET routes also respond to POST for large query values (`require 'jsonatra/break_rest'`)
 * accept form encoded **OR** JSON POST body parameters
 * always supply CORS headers
 * short-circuit OPTIONS requests

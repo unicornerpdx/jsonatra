@@ -1,4 +1,5 @@
 require_relative './helper'
+require 'jsonatra/break_rest'
 
 describe Jsonatra::Base do
 
