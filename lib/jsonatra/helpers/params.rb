@@ -45,6 +45,7 @@ module Jsonatra
         end
 
       end
+      @_params_hash.merge! @params
       @_params_hash
     end
 
