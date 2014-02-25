@@ -108,6 +108,19 @@ describe Jsonatra::Base do
       end
     end
 
+    it 'responds with CORS headers even when content-type is mismatched' do
+      params = {foo: 'bar'}.to_json
+      [:get, :post].each do |meth|
+        __send__ meth, '/', params, { 'Content-Type' => 'application/x-www-form-urlencoded' }
+        last_response.headers.keys.must_include 'Access-Control-Allow-Origin'
+        last_response.headers['Access-Control-Allow-Origin'].must_equal '*'
+        last_response.headers.keys.must_include 'Access-Control-Allow-Headers'
+        last_response.headers['Access-Control-Allow-Headers'].must_equal 'Accept, Authorization, Content-Type, Origin'
+        last_response.headers.keys.must_include 'Access-Control-Allow-Methods'
+        last_response.headers['Access-Control-Allow-Methods'].must_equal 'GET, POST'
+      end
+    end
+
   end
 
   describe 'access_control_headers' do

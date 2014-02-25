@@ -52,15 +52,6 @@ module Jsonatra
 
     before do
 
-      # default to Content-Type to JSON, or javascript if request is JSONP
-      #
-      content_type :json
-      unless params[:callback].nil? or params[:callback] == ''
-        halt param_error(:callback, :invalid, 'invalid callback') if params[:callback].index('"')
-        response.jsonp_callback = params[:callback]
-        content_type :js
-      end
-
       # grok access control headers
       #
       achs = begin
@@ -78,6 +69,15 @@ module Jsonatra
       # allow origin, oauth from everywhere
       #
       achs.each {|k,v| headers[k] = v}
+
+      # default to Content-Type to JSON, or javascript if request is JSONP
+      #
+      content_type :json
+      unless params[:callback].nil? or params[:callback] == ''
+        halt param_error(:callback, :invalid, 'invalid callback') if params[:callback].index('"')
+        response.jsonp_callback = params[:callback]
+        content_type :js
+      end
 
     end
 
