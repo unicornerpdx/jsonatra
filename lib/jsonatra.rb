@@ -90,7 +90,8 @@ module Jsonatra
     error do
       response.error = {
         type: :unexpected,
-        message: 'An unexpected error has occured, please try your request again later'
+        message: 'An unexpected error has occured, please try your request again later',
+        code: 500
       }
     end
 
@@ -104,7 +105,8 @@ module Jsonatra
     not_found do
       response.error = {
         type: :not_found,
-        message: "The requested path was not found: #{request.path}"
+        message: "The requested path was not found: #{request.path}",
+        code: 404
       }
     end
 
