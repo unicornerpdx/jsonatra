@@ -27,7 +27,8 @@ module Jsonatra
               end
               response.error = {
                 type: 'json_parse_error',
-                message: "could not process JSON: #{msg}"
+                message: "could not process JSON: #{msg}",
+                code: 400
               }
               halt
             end
@@ -76,7 +77,8 @@ module Jsonatra
       if body =~ /^[\{\[].*[\}\]]$/
         response.error = {
           type: 'content_type_mismatch',
-          message: 'Request looks like JSON but Content-Type header was not set to application/json'
+          message: 'Request looks like JSON but Content-Type header was not set to application/json',
+          code: 400
         }
         halt
       end
